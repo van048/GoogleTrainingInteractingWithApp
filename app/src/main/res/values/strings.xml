@@ -3,4 +3,5 @@
     <string name="build_an_implicit_intent">Build an Implicit Intent</string>
     <string name="chooser_title">Share with</string>
     <string name="start_activity_for_result">start activity for result</string>
+    <string name="return_a_result">return a result</string>
 </resources>

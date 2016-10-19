@@ -32,10 +32,40 @@ public class MainActivity extends AppCompatActivity {
 //            sendEmailWithAttachment();
 //
 //            createCalendarEvent();
-
-            showAppChooser();
+//
+//            showAppChooser();
+//
+//            pseudoStartFromOtherActivitySendTo();
+//
+            pseudoStartFromOtherActivitySend();
         }
     };
+
+    private void pseudoStartFromOtherActivitySendTo() {
+//        Uri sms_uri = Uri.parse("sms:13517596490");
+        Uri sms_uri = Uri.parse("smsto:13517596490");
+        Intent smsIntent = new Intent(Intent.ACTION_SENDTO, sms_uri);
+
+        Intent chooser = Intent.createChooser(smsIntent, "ACTION_SENDTO");
+        // Verify the intent will resolve to at least one activity??
+        if (smsIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(chooser);
+        }
+    }
+
+    static final int SEND_REQUEST = 2;  // The request code
+
+    private void pseudoStartFromOtherActivitySend() {
+        Intent smsIntent = new Intent(Intent.ACTION_SEND);
+//        smsIntent.setType("image/png");
+        smsIntent.setType("text/plain");
+
+        Intent chooser = Intent.createChooser(smsIntent, "ACTION_SEND");
+        // Verify the intent will resolve to at least one activity??
+        if (smsIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(chooser, SEND_REQUEST);
+        }
+    }
 
     static final int PICK_CONTACT_REQUEST = 1;  // The request code
     public View.OnClickListener startActivityForResultOnClickListener = new View.OnClickListener() {
@@ -173,6 +203,12 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, String.valueOf(number), Toast.LENGTH_SHORT).show();
                     cursor.close();
                 }
+            }
+        } else if (requestCode == SEND_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, data.getAction() + " " + data.getData(), Toast.LENGTH_SHORT).show();
+            } else if (resultCode == ShareActivity.RESULT_COLOR_RED) {
+                Toast.makeText(this, "result is an integer: " + resultCode, Toast.LENGTH_SHORT).show();
             }
         }
     }
